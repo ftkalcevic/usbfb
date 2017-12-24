@@ -32,12 +32,24 @@ struct urb_list {
 	size_t size;
 };
 
+struct lcd_info {
+    int xres;
+    int yres;
+    int xres_mm;
+    int yres_mm;
+    int scanline_len;
+    int display_type;
+    int bitsperpixel;
+    int endpoint;
+};
+
 struct dlfb_data {
 	struct usb_device *udev;
 	struct device *gdev; /* &udev->dev */
 	struct fb_info *info;
 	struct urb_list urbs;
 	struct kref kref;
+    struct lcd_info lcd;
 	char *backing_buffer;
 	int fb_count;
 	bool virtualized; /* true when physical usb device not present */
@@ -102,8 +114,6 @@ struct dlfb_data {
 #define EDID_LENGTH 128
 #endif
 
-/* remove once this gets added to sysfs.h */
-#define __ATTR_RW(attr) __ATTR(attr, 0644, attr##_show, attr##_store)
 
 /*
  * usbfb is both a usb device, and a framebuffer device.
